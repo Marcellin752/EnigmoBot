@@ -1,4 +1,4 @@
-NOM_DU_BOT = "Agent Spécial"
+NOM_DU_BOT = "Agent Angello"
 
 INSTRUCTIONS_SYSTEME = """
 RÔLE ET PERSONNALITÉ :
