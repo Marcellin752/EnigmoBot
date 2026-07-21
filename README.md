@@ -22,7 +22,7 @@ EnigmoBot est un bot Discord interactif propulsé par le modèle **Gemini** (Goo
 
 ### 1. Cloner le dépôt
 ```bash
-git clone [https://github.com/votre-nom-utilisateur/EnigmoBot.git](https://github.com/votre-nom-utilisateur/EnigmoBot.git)
+git clone git@github.com:Marcellin752/EnigmoBot.git
 cd EnigmoBot
 ```
 
