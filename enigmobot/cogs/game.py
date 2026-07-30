@@ -1,8 +1,11 @@
 import asyncio
+import logging
 import discord
 from discord.ext import commands
 from .. import config
 from ..game import MOTS_THEMES
+
+logger = logging.getLogger(__name__)
 
 
 class GameCog(commands.Cog):
@@ -28,12 +31,13 @@ class GameCog(commands.Cog):
                 texte = await self._ask_ai(message.channel.id, message.content)
             await message.reply(texte)
         except Exception as e:
-            print(f"Erreur on_message : {e}")
+            logger.error("on_message: %s", e)
 
     @discord.app_commands.command(name="play", description="Commence une nouvelle partie")
     async def play(self, interaction: discord.Interaction):
         await interaction.response.defer()
         session = self.bot.games.new_game(interaction.channel_id)
+        logger.info("Nouvelle partie channel=%d theme=%s mot=%s", interaction.channel_id, session.theme, session.secret_word)
         try:
             texte = await self._ask_ai(
                 interaction.channel_id,
@@ -44,7 +48,7 @@ class GameCog(commands.Cog):
                 f"🎯 Nouvelle partie ! Thème : **{session.theme}**\n{texte}"
             )
         except Exception as e:
-            print(f"Erreur play : {e}")
+            logger.error("play: %s", e)
             await interaction.followup.send("❌ Erreur lors du lancement de la partie.")
 
     @discord.app_commands.command(name="guess", description="Propose un mot")
@@ -89,7 +93,7 @@ class GameCog(commands.Cog):
             )
             await interaction.followup.send(f"💡 Indice #{session.hints_given} :\n{texte}")
         except Exception as e:
-            print(f"Erreur indice : {e}")
+            logger.error("indice: %s", e)
             await interaction.followup.send("❌ Erreur lors de la demande d'indice.")
 
     @discord.app_commands.command(name="abandonner", description="Abandonne et révèle le mot secret")
@@ -112,7 +116,7 @@ class GameCog(commands.Cog):
                 f"Utilise `/play` pour retenter ta chance."
             )
         except Exception as e:
-            print(f"Erreur abandonner : {e}")
+            logger.error("abandonner: %s", e)
             await interaction.followup.send(f"😔 Le mot secret était **{mot}**.")
 
     @guess.autocomplete("mot")

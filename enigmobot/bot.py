@@ -1,9 +1,12 @@
 import asyncio
+import logging
 import discord
 from discord.ext import commands
 from . import config
 from .ai import GeminiClient
 from .game import GameManager
+
+logger = logging.getLogger(__name__)
 
 
 class EnigmoBot(commands.Bot):
@@ -20,5 +23,5 @@ class EnigmoBot(commands.Bot):
         await self.tree.sync()
 
     async def on_ready(self):
-        print(f"L'agent {config.NOM_DU_BOT} est en ligne sur Discord !")
+        logger.info("Agent %s en ligne sur Discord !", config.NOM_DU_BOT)
         await self.change_presence(activity=discord.Game(name="🔍 Jeu du mot secret"))
