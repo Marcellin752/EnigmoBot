@@ -4,11 +4,14 @@ from collections import defaultdict
 
 
 MOTS_THEMES = {
-    "animaux": ["elephant", "girafe", "dauphin", "pingouin", "chameau", "papillon", "ecureuil", "hibou"],
-    "objets": ["parapluie", "marteau", "horloge", "miroir", "balancoire", "bougie", "cles", "chapeau"],
-    "nourriture": ["chocolat", "fraise", "fromage", "pizza", "glace", "crepe", "confiture", "miel"],
-    "nature": ["arcenciel", "volcan", "cascade", "montagne", "foret", "desert", "etoile", "riviere"],
-    "sports": ["velo", "escalade", "natation", "football", "tennis", "ski", "plongeon", "flechettes"],
+    "animaux": ["elephant", "girafe", "dauphin", "pingouin", "chameau", "papillon", "ecureuil", "hibou", "crocodile", "panda", "koala", "renard", "loup", "baleine", "fourmi"],
+    "objets": ["parapluie", "marteau", "horloge", "miroir", "balancoire", "bougie", "cles", "chapeau", "boussole", "echiquier", "guitare", "cerfvolant", "lunettes", "batte"],
+    "nourriture": ["chocolat", "fraise", "fromage", "pizza", "glace", "crepe", "confiture", "miel", "pasteque", "avocat", "lasagnes", "choucroute", "mangue"],
+    "nature": ["arcenciel", "volcan", "cascade", "montagne", "foret", "desert", "etoile", "riviere", "tempete", "geyser", "lagune", "aurore", "glacier", "grotte"],
+    "sports": ["velo", "escalade", "natation", "football", "tennis", "ski", "plongeon", "flechettes", "surf", "escrime", "badminton", "volleyball"],
+    "musique": ["piano", "violon", "guitare", "batterie", "trompette", "harpe", "flute", "saxophone", "accordéon", "ukulele"],
+    "metiers": ["pompier", "astronaute", "archeologue", "veterinaire", "detective", "sculpteur", "pilote", "magicien"],
+    "transports": ["fusee", "montgolfiere", "sousmarin", "traineau", "helicoptere", "planchevoile", "deltaplane", "voilier"],
 }
 
 
