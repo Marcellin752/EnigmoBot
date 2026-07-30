@@ -18,7 +18,7 @@ class EnigmoBot(commands.Bot):
         self.games = GameManager()
 
     async def setup_hook(self):
-        from .cogs.game import GameCog
+        from .cogs.commands import GameCog
         await self.add_cog(GameCog(self))
         await self.tree.sync()
 
