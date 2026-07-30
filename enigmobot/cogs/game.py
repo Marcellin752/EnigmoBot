@@ -30,14 +30,22 @@ class GameCog(commands.Cog):
             async with message.channel.typing():
                 texte = await self._ask_ai(message.channel.id, message.content)
             await message.reply(texte)
+        except discord.Forbidden:
+            logger.warning("on_message: permission refusée channel=%d", message.channel.id)
         except Exception as e:
             logger.error("on_message: %s", e)
 
     @discord.app_commands.command(name="play", description="Commence une nouvelle partie")
-    async def play(self, interaction: discord.Interaction):
+    async def play(self, interaction: discord.Interaction, theme: str | None = None):
         await interaction.response.defer()
-        session = self.bot.games.new_game(interaction.channel_id)
-        logger.info("Nouvelle partie channel=%d theme=%s mot=%s", interaction.channel_id, session.theme, session.secret_word)
+        session = self.bot.games.new_game(
+            interaction.channel_id,
+            user_id=interaction.user.id,
+            user_name=interaction.user.name,
+            theme=theme,
+        )
+        logger.info("Nouvelle partie channel=%d user=%s theme=%s mot=%s",
+                     interaction.channel_id, interaction.user.name, session.theme, session.secret_word)
         try:
             texte = await self._ask_ai(
                 interaction.channel_id,
@@ -118,6 +126,63 @@ class GameCog(commands.Cog):
         except Exception as e:
             logger.error("abandonner: %s", e)
             await interaction.followup.send(f"😔 Le mot secret était **{mot}**.")
+
+    @discord.app_commands.command(name="score", description="Affiche ton score cumulé")
+    async def score(self, interaction: discord.Interaction):
+        total = self.bot.games.get_player_score(interaction.user.id)
+        session = self.bot.games.get_or_create(interaction.channel_id)
+        if session.secret_word:
+            await interaction.response.send_message(
+                f"📊 **Partie en cours** — Thème : {session.theme}\n"
+                f"Tentatives : {session.attempts} | Indices : {session.hints_given} | Score partie : {session.score} pts\n"
+                f"🏆 **Score total** : {total} pts"
+            )
+        else:
+            await interaction.response.send_message(f"🏆 **Score total** : {total} pts")
+
+    @discord.app_commands.command(name="leaderboard", description="Affiche le classement des meilleurs joueurs")
+    async def leaderboard(self, interaction: discord.Interaction):
+        board = self.bot.games.get_leaderboard()
+        if not board:
+            await interaction.response.send_message("📭 Aucun score pour le moment. Sois le premier à jouer !")
+            return
+        lignes = []
+        for i, (uid, pts) in enumerate(board, 1):
+            user = interaction.guild.get_member(uid) if interaction.guild else None
+            name = user.display_name if user else f"Joueur#{uid}"
+            lignes.append(f"{i}. **{name}** — {pts} pts")
+        await interaction.response.send_message("🏆 **Classement**\n" + "\n".join(lignes))
+
+    @discord.app_commands.command(name="help", description="Affiche l'aide et la liste des commandes")
+    async def help_cmd(self, interaction: discord.Interaction):
+        embed = discord.Embed(
+            title=f"🎯 {config.NOM_DU_BOT} — Aide",
+            description="Jeu du mot secret : trouve le mot caché grâce aux indices !",
+            color=discord.Color.blue(),
+        )
+        embed.add_field(name="/play [theme]", value="Commence une nouvelle partie (thème optionnel)", inline=False)
+        embed.add_field(name="/guess <mot>", value="Propose un mot pour deviner", inline=False)
+        embed.add_field(name="/indice", value="Demande un indice supplémentaire", inline=False)
+        embed.add_field(name="/abandonner", value="Abandonne et révèle le mot secret", inline=False)
+        embed.add_field(name="/score", value="Affiche ton score cumulé", inline=False)
+        embed.add_field(name="/leaderboard", value="Affiche le classement des joueurs", inline=False)
+        embed.add_field(name="/theme", value="Affiche la liste des thèmes", inline=False)
+        embed.set_footer(text="Tu peux aussi parler normalement, l'IA répondra à tout !")
+        await interaction.response.send_message(embed=embed)
+
+    @discord.app_commands.command(name="theme", description="Affiche la liste des thèmes disponibles")
+    async def theme_list(self, interaction: discord.Interaction):
+        themes = "\n".join(f"• **{t}** ({len(m)} mots)" for t, m in MOTS_THEMES.items())
+        await interaction.response.send_message(
+            f"🎨 **Thèmes disponibles**\n{themes}\n\nUtilise `/play theme:nom` pour choisir un thème."
+        )
+
+    @play.autocomplete("theme")
+    async def play_theme_autocomplete(self, interaction: discord.Interaction, current: str):
+        return [
+            discord.app_commands.Choice(name=t, value=t)
+            for t in MOTS_THEMES if current.lower() in t.lower()
+        ][:5]
 
     @guess.autocomplete("mot")
     async def mot_autocomplete(self, interaction: discord.Interaction, current: str):
