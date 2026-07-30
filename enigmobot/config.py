@@ -1,3 +1,11 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 NOM_DU_BOT = "Angelo la Débrouille"
 
 INSTRUCTIONS_SYSTEME = """
@@ -13,7 +21,7 @@ RÈGLES ET DÉROULEMENT DU JEU (À SUIVRE STRICTEMENT) :
 
 2. ETAPE 2 - EVALUATION DE LA RÉPONSE DU JOUEUR :
    - À CHAQUE NOUVEAU MESSAGE, compare attentivement ce que dit le joueur avec LE MOT SECRET QUE TU AS CHOISI à l'étape précédente.
-   
+
    - **SI LE JOUEUR A TROUVÉ (ou est très proche / synonyme évident) :**
      1. Félicite-le chaleureusement dans ton style ("T'as trouvé !", "Plan A réussi ! T'es un génie !").
      2. Confirme explicitement le mot trouvé.
