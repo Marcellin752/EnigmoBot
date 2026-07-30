@@ -53,11 +53,11 @@ class GameCog(commands.Cog):
                 f"Ne le révèle jamais directement. Donne le premier indice.",
             )
             await interaction.followup.send(
-                f"🎯 Nouvelle partie ! Thème : **{session.theme}**\n{texte}"
+                f"Nouvelle partie ! Thème : **{session.theme}**\n{texte}"
             )
         except Exception as e:
             logger.error("play: %s", e)
-            await interaction.followup.send("❌ Erreur lors du lancement de la partie.")
+            await interaction.followup.send("[X] Erreur lors du lancement de la partie.")
 
     @discord.app_commands.command(name="guess", description="Propose un mot")
     async def guess(self, interaction: discord.Interaction, mot: str):
@@ -74,7 +74,7 @@ class GameCog(commands.Cog):
                 f"Félicite-le chaleureusement et proposer de refaire une partie.",
             )
             await interaction.followup.send(
-                f"🎉 **Trouvé !** Le mot était **{mot_trouve}**. "
+                f" **Trouvé !** Le mot était **{mot_trouve}**. "
                 f"Tu gagnes **{session.score} points** ! "
                 f"Utilise `/play` pour recommencer."
             )
@@ -84,7 +84,7 @@ class GameCog(commands.Cog):
                 f"Le joueur a proposé : {mot}. Ce n'est pas le mot secret. "
                 f"Dis-lui que c'est faux avec humour et donne un nouvel indice.",
             )
-            await interaction.followup.send(f"❌ Non, ce n'est pas **{mot}**.\n{texte}")
+            await interaction.followup.send(f"[X] Non, ce n'est pas **{mot}**.\n{texte}")
 
     @discord.app_commands.command(name="indice", description="Demande un indice supplémentaire")
     async def indice(self, interaction: discord.Interaction):
@@ -99,10 +99,10 @@ class GameCog(commands.Cog):
                 interaction.channel_id,
                 "Donne un indice supplémentaire sur le mot secret (sans le révéler).",
             )
-            await interaction.followup.send(f"💡 Indice #{session.hints_given} :\n{texte}")
+            await interaction.followup.send(f" Indice #{session.hints_given} :\n{texte}")
         except Exception as e:
             logger.error("indice: %s", e)
-            await interaction.followup.send("❌ Erreur lors de la demande d'indice.")
+            await interaction.followup.send("[X] Erreur lors de la demande d'indice.")
 
     @discord.app_commands.command(name="abandonner", description="Abandonne et révèle le mot secret")
     async def abandonner(self, interaction: discord.Interaction):
@@ -120,12 +120,12 @@ class GameCog(commands.Cog):
                 f"Dis-lui la réponse et propose de refaire une partie.",
             )
             await interaction.followup.send(
-                f"😔 Dommage ! Le mot secret était **{mot}**. "
+                f" Dommage ! Le mot secret était **{mot}**. "
                 f"Utilise `/play` pour retenter ta chance."
             )
         except Exception as e:
             logger.error("abandonner: %s", e)
-            await interaction.followup.send(f"😔 Le mot secret était **{mot}**.")
+            await interaction.followup.send(f" Le mot secret était **{mot}**.")
 
     @discord.app_commands.command(name="score", description="Affiche ton score cumulé")
     async def score(self, interaction: discord.Interaction):
@@ -133,30 +133,30 @@ class GameCog(commands.Cog):
         session = self.bot.games.get_or_create(interaction.channel_id)
         if session.secret_word:
             await interaction.response.send_message(
-                f"📊 **Partie en cours** — Thème : {session.theme}\n"
+                f" **Partie en cours** — Thème : {session.theme}\n"
                 f"Tentatives : {session.attempts} | Indices : {session.hints_given} | Score partie : {session.score} pts\n"
-                f"🏆 **Score total** : {total} pts"
+                f" **Score total** : {total} pts"
             )
         else:
-            await interaction.response.send_message(f"🏆 **Score total** : {total} pts")
+            await interaction.response.send_message(f" **Score total** : {total} pts")
 
     @discord.app_commands.command(name="leaderboard", description="Affiche le classement des meilleurs joueurs")
     async def leaderboard(self, interaction: discord.Interaction):
         board = self.bot.games.get_leaderboard()
         if not board:
-            await interaction.response.send_message("📭 Aucun score pour le moment. Sois le premier à jouer !")
+            await interaction.response.send_message(" Aucun score pour le moment. Sois le premier à jouer !")
             return
         lignes = []
         for i, (uid, pts) in enumerate(board, 1):
             user = interaction.guild.get_member(uid) if interaction.guild else None
             name = user.display_name if user else f"Joueur#{uid}"
             lignes.append(f"{i}. **{name}** — {pts} pts")
-        await interaction.response.send_message("🏆 **Classement**\n" + "\n".join(lignes))
+        await interaction.response.send_message(" **Classement**\n" + "\n".join(lignes))
 
     @discord.app_commands.command(name="help", description="Affiche l'aide et la liste des commandes")
     async def help_cmd(self, interaction: discord.Interaction):
         embed = discord.Embed(
-            title=f"🎯 {config.NOM_DU_BOT} — Aide",
+            title=f"{config.NOM_DU_BOT} — Aide",
             description="Jeu du mot secret : trouve le mot caché grâce aux indices !",
             color=discord.Color.blue(),
         )
@@ -174,7 +174,7 @@ class GameCog(commands.Cog):
     async def theme_list(self, interaction: discord.Interaction):
         themes = "\n".join(f"• **{t}** ({len(m)} mots)" for t, m in MOTS_THEMES.items())
         await interaction.response.send_message(
-            f"🎨 **Thèmes disponibles**\n{themes}\n\nUtilise `/play theme:nom` pour choisir un thème."
+            f" **Thèmes disponibles**\n{themes}\n\nUtilise `/play theme:nom` pour choisir un thème."
         )
 
     @play.autocomplete("theme")

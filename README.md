@@ -1,41 +1,41 @@
-# EnigmoBot — Angelo la Débrouille
+# EnigmoBot — Angelo la Debrouille
 
-Bot Discord interactif propulsé par **Gemini** (Google AI). Incarne **Angelo la Débrouille** et défie les joueurs à trouver un mot secret grâce à des indices.
+Interactive Discord bot powered by **Gemini** (Google AI). Embodies **Angelo la Debrouille** and challenges players to find a secret word through clues.
 
 ---
 
-## Fonctionnalités
+## Features
 
-- **Personnalité unique** via les instructions système Gemini
-- **8 thèmes** : animaux, objets, nourriture, nature, sports, musique, métiers, transports
-- **Système de score** avec points, bonus et classement
-- **Commandes slash** : `/play`, `/guess`, `/indice`, `/abandonner`, `/score`, `/leaderboard`, `/theme`, `/help`
-- **Sessions isolées par salon** — chaque salon a sa propre partie
-- **Validation côté code** du mot secret (pas de triche possible)
-- **Logs structurés** avec timestamps
+- **Unique personality** via Gemini system instructions
+- **8 themes**: animals, objects, food, nature, sports, music, professions, vehicles
+- **Score system** with points, penalties, and leaderboard
+- **Slash commands**: `/play`, `/guess`, `/hint`, `/surrender`, `/score`, `/leaderboard`, `/theme`, `/help`
+- **Per-channel sessions** — each channel has its own game
+- **Server-side validation** of the secret word (no cheating)
+- **Structured logging** with timestamps
 
 ---
 
 ## Installation
 
-### Prérequis
-- Python 3.10 ou supérieur
-- Un compte Discord et une application sur le [Discord Developer Portal](https://discord.com/developers/applications)
-- Une clé API Gemini sur [Google AI Studio](https://aistudio.google.com/)
+### Requirements
+- Python 3.10 or higher
+- A Discord account and application on the [Discord Developer Portal](https://discord.com/developers/applications)
+- A Gemini API key from [Google AI Studio](https://aistudio.google.com/)
 
-### 1. Cloner
+### 1. Clone
 ```bash
 git clone git@github.com:Marcellin752/EnigmoBot.git
 cd EnigmoBot
 ```
 
-### 2. Environnement virtuel
+### 2. Virtual environment
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Dépendances
+### 3. Dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -44,47 +44,47 @@ pip install -r requirements.txt
 ```bash
 cp .env.example .env
 ```
-Éditez `.env` avec vos tokens :
+Edit `.env` with your tokens:
 ```
-DISCORD_TOKEN="VOTRE_TOKEN_DISCORD"
-GEMINI_API_KEY="VOTRE_CLE_API_GEMINI"
+DISCORD_TOKEN="YOUR_DISCORD_TOKEN"
+GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
 ```
 
-### 5. Lancer
+### 5. Run
 ```bash
 python3 main.py
 ```
 
 ---
 
-## Commandes
+## Commands
 
-| Commande | Description |
+| Command | Description |
 |---|---|
-| `/play [theme]` | Commence une nouvelle partie (thème optionnel) |
-| `/guess <mot>` | Propose un mot |
-| `/indice` | Demande un indice supplémentaire |
-| `/abandonner` | Abandonne et révèle le mot |
-| `/score` | Affiche ton score cumulé |
-| `/leaderboard` | Classement des meilleurs joueurs |
-| `/theme` | Liste des thèmes disponibles |
-| `/help` | Aide complète |
+| `/play [theme]` | Start a new game (optional theme) |
+| `/guess <word>` | Guess a word |
+| `/hint` | Request an additional hint |
+| `/surrender` | Give up and reveal the word |
+| `/score` | Show your cumulative score |
+| `/leaderboard` | Show the player rankings |
+| `/theme` | List available themes |
+| `/help` | Full command guide |
 
-Tu peux aussi **parler normalement** dans le salon — l'IA répondra et donnera des indices automatiquement.
+You can also **chat normally** in the channel — the AI will respond and give hints automatically.
 
 ---
 
-## Structure du projet
+## Project structure
 
 ```
-enigmobot/                  # Package principal
-├── config.py               # Variables d'env + instructions système
-├── ai.py                   # Client Gemini (sessions par salon)
-├── game.py                 # Logique métier (mots, scores, validation)
-├── bot.py                  # Client Discord
-├── cogs/game.py            # Commandes slash + événements
-├── __main__.py             # Entrée python -m enigmobot
-├── main.py                 # Point d'entrée
-├── requirements.txt        # 3 dépendances
+enigmobot/
+├── config.py               # Env vars + system instructions
+├── ai.py                   # Gemini client (per-channel sessions)
+├── game.py                 # Game logic (words, scores, validation)
+├── bot.py                  # Discord client
+├── cogs/game.py            # Slash commands + events
+├── __main__.py             # Entry point (python -m enigmobot)
+├── main.py                 # Entry point
+├── requirements.txt        # 3 dependencies
 └── README.md
 ```

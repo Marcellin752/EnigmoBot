@@ -24,7 +24,7 @@ class EnigmoBot(commands.Bot):
 
     async def on_ready(self):
         logger.info("Agent %s en ligne sur %d serveur(s) !", config.NOM_DU_BOT, len(self.guilds))
-        await self.change_presence(activity=discord.Game(name="🔍 Jeu du mot secret"))
+        await self.change_presence(activity=discord.Game(name="Jeu du mot secret"))
 
     async def close(self):
         logger.info("Arrêt du bot %s", config.NOM_DU_BOT)
