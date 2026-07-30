@@ -34,12 +34,13 @@ class GameCog(commands.Cog):
             logger.error("on_message: %s", e)
 
     @discord.app_commands.command(name="play", description="Commence une nouvelle partie")
-    async def play(self, interaction: discord.Interaction):
+    async def play(self, interaction: discord.Interaction, theme: str | None = None):
         await interaction.response.defer()
         session = self.bot.games.new_game(
             interaction.channel_id,
             user_id=interaction.user.id,
             user_name=interaction.user.name,
+            theme=theme,
         )
         logger.info("Nouvelle partie channel=%d user=%s theme=%s mot=%s",
                      interaction.channel_id, interaction.user.name, session.theme, session.secret_word)
@@ -149,6 +150,20 @@ class GameCog(commands.Cog):
             name = user.display_name if user else f"Joueur#{uid}"
             lignes.append(f"{i}. **{name}** — {pts} pts")
         await interaction.response.send_message("🏆 **Classement**\n" + "\n".join(lignes))
+
+    @discord.app_commands.command(name="theme", description="Affiche la liste des thèmes disponibles")
+    async def theme_list(self, interaction: discord.Interaction):
+        themes = "\n".join(f"• **{t}** ({len(m)} mots)" for t, m in MOTS_THEMES.items())
+        await interaction.response.send_message(
+            f"🎨 **Thèmes disponibles**\n{themes}\n\nUtilise `/play theme:nom` pour choisir un thème."
+        )
+
+    @play.autocomplete("theme")
+    async def play_theme_autocomplete(self, interaction: discord.Interaction, current: str):
+        return [
+            discord.app_commands.Choice(name=t, value=t)
+            for t in MOTS_THEMES if current.lower() in t.lower()
+        ][:5]
 
     @guess.autocomplete("mot")
     async def mot_autocomplete(self, interaction: discord.Interaction, current: str):
