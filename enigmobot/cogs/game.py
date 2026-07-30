@@ -30,6 +30,8 @@ class GameCog(commands.Cog):
             async with message.channel.typing():
                 texte = await self._ask_ai(message.channel.id, message.content)
             await message.reply(texte)
+        except discord.Forbidden:
+            logger.warning("on_message: permission refusée channel=%d", message.channel.id)
         except Exception as e:
             logger.error("on_message: %s", e)
 
