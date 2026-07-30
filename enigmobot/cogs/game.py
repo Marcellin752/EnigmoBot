@@ -119,6 +119,20 @@ class GameCog(commands.Cog):
             logger.error("abandonner: %s", e)
             await interaction.followup.send(f"😔 Le mot secret était **{mot}**.")
 
+    @discord.app_commands.command(name="score", description="Affiche ton score actuel")
+    async def score(self, interaction: discord.Interaction):
+        session = self.bot.games.get_or_create(interaction.channel_id)
+        if session.secret_word:
+            await interaction.response.send_message(
+                f"📊 **Partie en cours** — Thème : {session.theme}\n"
+                f"Tentatives : {session.attempts} | Indices : {session.hints_given} | Score : {session.score} pts"
+            )
+        else:
+            await interaction.response.send_message(
+                f"📊 **Score actuel** : {session.score} pts\n"
+                f"Utilise `/play` pour commencer une partie."
+            )
+
     @guess.autocomplete("mot")
     async def mot_autocomplete(self, interaction: discord.Interaction, current: str):
         session = self.bot.games.get_or_create(interaction.channel_id)
