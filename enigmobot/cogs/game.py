@@ -151,6 +151,23 @@ class GameCog(commands.Cog):
             lignes.append(f"{i}. **{name}** — {pts} pts")
         await interaction.response.send_message("🏆 **Classement**\n" + "\n".join(lignes))
 
+    @discord.app_commands.command(name="help", description="Affiche l'aide et la liste des commandes")
+    async def help_cmd(self, interaction: discord.Interaction):
+        embed = discord.Embed(
+            title=f"🎯 {config.NOM_DU_BOT} — Aide",
+            description="Jeu du mot secret : trouve le mot caché grâce aux indices !",
+            color=discord.Color.blue(),
+        )
+        embed.add_field(name="/play [theme]", value="Commence une nouvelle partie (thème optionnel)", inline=False)
+        embed.add_field(name="/guess <mot>", value="Propose un mot pour deviner", inline=False)
+        embed.add_field(name="/indice", value="Demande un indice supplémentaire", inline=False)
+        embed.add_field(name="/abandonner", value="Abandonne et révèle le mot secret", inline=False)
+        embed.add_field(name="/score", value="Affiche ton score cumulé", inline=False)
+        embed.add_field(name="/leaderboard", value="Affiche le classement des joueurs", inline=False)
+        embed.add_field(name="/theme", value="Affiche la liste des thèmes", inline=False)
+        embed.set_footer(text="Tu peux aussi parler normalement, l'IA répondra à tout !")
+        await interaction.response.send_message(embed=embed)
+
     @discord.app_commands.command(name="theme", description="Affiche la liste des thèmes disponibles")
     async def theme_list(self, interaction: discord.Interaction):
         themes = "\n".join(f"• **{t}** ({len(m)} mots)" for t, m in MOTS_THEMES.items())
