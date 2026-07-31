@@ -29,7 +29,8 @@ class GameSession:
 
     def points(self) -> int:
         base = 100
-        penalty = self.hints_given * 15 + self.attempts * 5
+        wrong_attempts = max(0, self.attempts - 1) if self.found else self.attempts
+        penalty = self.hints_given * 15 + wrong_attempts * 5
         return max(10, base - penalty)
 
 
@@ -68,6 +69,7 @@ class GameManager:
             return False, "Aucune partie en cours. Lance /play pour commencer."
         session.attempts += 1
         if guess.lower().strip() == session.secret_word.lower():
+            session.found = True
             points = session.points()
             session.score += points
             self._player_scores[session.user_id] += points
