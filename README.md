@@ -18,6 +18,9 @@ Interactive Discord bot powered by **Gemini** (Google AI). Embodies **Angelo la 
 
 ## Installation
 
+> **New to this?** Follow the step-by-step guides in [docs/](docs/README.md) —
+> they explain how to create a Discord bot and connect it from scratch.
+
 ### Requirements
 - Python 3.10 or higher
 - A Discord account and application on the [Discord Developer Portal](https://discord.com/developers/applications)
@@ -55,6 +58,26 @@ GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
 python3 main.py
 ```
 
+### Tests
+```bash
+python3 -m pytest tests/ -v
+```
+
+---
+
+## Documentation
+
+Step-by-step setup guides are available in [docs/](docs/README.md):
+
+| Guide | Description |
+|---|---|
+| [Prerequisites](docs/PREREQUISITES.md) | What you need before starting |
+| [Discord Bot Setup](docs/DISCORD_SETUP.md) | Create a Discord application and get a bot token |
+| [Invite the Bot](docs/INVITE_BOT.md) | Add the bot to your server |
+| [Gemini API Setup](docs/GEMINI_SETUP.md) | Get a free Gemini API key |
+| [Configuration](docs/CONFIGURATION.md) | Configure the `.env` file |
+| [Run the Bot](docs/RUNNING.md) | Launch and verify the bot |
+
 ---
 
 ## Commands
@@ -82,9 +105,11 @@ enigmobot/
 ├── ai.py                   # Gemini client (per-channel sessions)
 ├── game.py                 # Game logic (words, scores, validation)
 ├── bot.py                  # Discord client
-├── cogs/game.py            # Slash commands + events
+├── cogs/commands.py        # Slash commands + events
 ├── __main__.py             # Entry point (python -m enigmobot)
 ├── main.py                 # Entry point
-├── requirements.txt        # 3 dependencies
+├── tests/                  # Unit tests
+├── docs/                   # Setup guides
+├── requirements.txt        # Dependencies
 └── README.md
 ```
